@@ -118,7 +118,7 @@ def display_result(response):
 
 def main():
 
-    filename = 'DefaultConfig.json'
+    filename = 'config.json'
     
     # Handle configurations
     default_config(filename)
