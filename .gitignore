@@ -1,1 +1,6 @@
 .vscode/
+config.json
+openai.key
+__pycache__/
+sandbox.py
+flask_example.py
