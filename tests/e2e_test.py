@@ -4,7 +4,7 @@ import json
 def main_tester():
 
     url = "https://www.euroleaguebasketball.net/eurocup/news/paris-secures-signing-of-french-prodigy-nadir-hifi/"
-    command = f"python tldrgpt.py {url}"
+    command = f"python3 tldrgpt.py {url}"
     num_of_lines = 4
     
     # Execute the command
