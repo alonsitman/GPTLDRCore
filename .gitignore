@@ -4,3 +4,4 @@ openai.key
 __pycache__/
 sandbox.py
 flask_example.py
+tldrgpt_server_key.pem
