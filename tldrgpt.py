@@ -1,6 +1,5 @@
 # GPT Sanity check - "What is the most populated country in the world?"
 
-from newspaper import Config
 from newspaper import Article
 import openai
 import sys
@@ -113,7 +112,7 @@ def display_result(response):
     print(response)
 
 
-def main():
+def main_runner(url):
 
     filename = 'config.json'
     
@@ -125,10 +124,12 @@ def main():
     key = config_dict['api_key']
 
     # Get URL from cmd line argument:
-    url = get_params()
+    
     if not url:
-        print("Missing URL")
-        return None
+        url = get_params()
+        if not url:
+            print("Missing URL")
+            return None
     
     # Check that the URL is vald:
     if not validate_url(url):
@@ -145,6 +146,12 @@ def main():
     # Prepare query, send it and display result
     query = prepare_query(num_bulletins, num_words, title, text)
     response = send_query(key, query)
-    display_result(response)        
+    
+    display_result(response)
 
-# main()
+    return response      
+
+def main():
+    main_runner(None)
+
+main()
