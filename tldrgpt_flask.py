@@ -1,24 +1,25 @@
-from flask import Flask
-from flask import request
+# importing Flask and other modules
+from flask import Flask, request, render_template
 from tldrgpt import main_runner
 
-
-# create the Flask app
+# Flask constructor
 app = Flask(__name__)
 
-@app.route('/tldr_article')
-def tldr_article():
-    # if key doesn't exist, returns None
-    url = request.args.get('url')
+# A decorator used to tell the application
+# which URL is associated function
+@app.route('/', methods =["GET", "POST"])
+def index():
+   
+    response="Response will be displayed here..."
 
-    if not url:
-        return 'Missing Article URL'
+    if request.method == "POST":
+        # getting input with name = article_url in HTML form
+        article_url = request.form.get("article_url")    
+        response = main_runner(article_url).removeprefix("\n\n")
+    
+    return render_template("index.html", response_placeholder=response)
 
-    response = main_runner(url).replace('\n', '<br>')
 
-    return response
 
-def main():
-    app.run(debug=False, host='0.0.0.0', port=5000)
-
-main()
+if __name__=='__main__':
+    app.run(ssl_context='adhoc')
