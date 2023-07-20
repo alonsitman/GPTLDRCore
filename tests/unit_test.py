@@ -158,15 +158,20 @@ def test_send_query():
   return True
 
 
-def main_tester():
+def test_run():
+  url = "https://www.euroleaguebasketball.net/eurocup/news/paris-secures-signing-of-french-prodigy-nadir-hifi/"
+  target.run(url)
 
-  test_default_config()
-  test_read_config()
-  test_validate_url()
-  test_get_article()
-  test_extract_title()
-  test_extract_text()
-  test_send_query()
+def main_tester():
+  test_run()
+  # test_default_config()
+  # test_read_config()
+  # test_validate_url()
+  # test_get_article()
+  # test_extract_title()
+  # test_extract_text()
+  # test_send_query()
+
 
 
 main_tester()

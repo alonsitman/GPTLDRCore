@@ -1,8 +1,6 @@
 # GPT Sanity check - "What is the most populated country in the world?"
 
-from newspaper import Article
 import openai
-import sys
 import os
 import json
  
@@ -10,7 +8,7 @@ import json
 def default_config(filename):
  
     if os.path.isfile(filename) and os.path.getsize(filename): # check if file exists and not empty
-        print('Configuration already exists')
+        # print('Configuration already exists')
         return False
     
     default_config = {
@@ -36,47 +34,6 @@ def read_config(filename):
     return config_dict
 
 
-def get_params():
-    
-    if len(sys.argv) > 1:
-        url = sys.argv[1] #user passes url in terminal after python file name which is at sys.argv[0]
-        return url
-    
-    return None
-
-
-def validate_url(url):
-    
-    space = ' '
-    if space in url:
-        return False    
-    
-    return True
-
-
-def get_article(url): #using newspaper module
-
-    article = Article(url)
-    article.download()
-    article.parse()
-    
-    return article
-
-
-def extract_title(article):
-    
-    title = article.title
-    
-    return title
-
-
-def extract_text(article):
-    
-    text = article.text #perhaps it should be article.text
-    
-    return text
-
-
 def prepare_query(num_bulletins, num_words, title, text): #Embed "tldr" command, configurations, title and text in prompt
 
     query = "Give output in tldr style, " \
@@ -84,6 +41,7 @@ def prepare_query(num_bulletins, num_words, title, text): #Embed "tldr" command,
             f"The article title is: {title} and article text is: {text}"
     
     return query
+
 
 def send_query(key, query):
     
@@ -108,14 +66,12 @@ def send_query(key, query):
 
 
 def display_result(response):
-
+    print()
     print(response)
+    print()
 
 
-def main_runner(url):
-
-    filename = 'config.json'
-    
+def run(title, text, filename='config.json'):
     # Handle configurations
     default_config(filename)
     config_dict = read_config(filename)
@@ -123,35 +79,11 @@ def main_runner(url):
     num_words = config_dict['num_words']
     key = config_dict['api_key']
 
-    # Get URL from cmd line argument:
-    
-    if not url:
-        url = get_params()
-        if not url:
-            print("Missing URL")
-            return None
-    
-    # Check that the URL is vald:
-    if not validate_url(url):
-        print("Please insert URL without spaces") 
-        return None
-   
-    # Download and parse the article:
-    article = get_article(url)
-    
-    # Extract title and text from article + tldr configurations from JSON:
-    title = extract_title(article)
-    text = extract_text(article)
-
     # Prepare query, send it and display result
     query = prepare_query(num_bulletins, num_words, title, text)
     response = send_query(key, query)
-    
-    display_result(response)
+    formatted_response = response.removeprefix("\n\n")
+    formatted_tldr = f"{title}\n{str(formatted_response)}"
+    display_result(formatted_tldr)
 
-    return response      
-
-def main():
-    main_runner(None)
-
-# main()
+    return response
